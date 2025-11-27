@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClassLink - Ցուցակային Համակարգ</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ClassLink</h1>
+            <p>Ցուցակային Համակարգ</p>
+        </div>
+        
+        <div class="role-selection">
+            <h2>Ընտրեք ձեր դերը</h2>
+            <button onclick="showStudentLogin()" class="role-btn">Աշակերտ</button>
+            <button onclick="showTeacherLogin()" class="role-btn">Ուսուցիչ</button>
+        </div>
+
+        <!-- Student Login/Register -->
+        <div id="student-section" class="auth-section hidden">
+            <div class="auth-container">
+                <h2>Աշակերտի Մուտք</h2>
+                <div class="tab-buttons">
+                    <button onclick="showStudentLogin()" class="tab-btn active" id="student-login-tab">Մուտք</button>
+                    <button onclick="showStudentRegister()" class="tab-btn" id="student-register-tab">Գրանցում</button>
+                </div>
+
+                <!-- Student Login Form -->
+                <form id="student-login-form" class="auth-form">
+                    <input type="text" id="student-username" placeholder="Օգտատիրոջ անուն" required>
+                    <input type="password" id="student-password" placeholder="Գաղտնաբառ" required>
+                    <button type="submit">Մուտք գործել</button>
+                    <button type="button" onclick="showRoleSelection()" class="back-btn">Վերադառնալ</button>
+                </form>
+
+                <!-- Student Register Form -->
+                <form id="student-register-form" class="auth-form hidden">
+                    <input type="text" id="reg-student-name" placeholder="Անուն Ազգանուն" required>
+                    <input type="text" id="reg-student-username" placeholder="Օգտատիրոջ անուն" required>
+                    <input type="password" id="reg-student-password" placeholder="Գաղտնաբառ" required>
+                    <select id="reg-student-grade" required>
+                        <option value="">Ընտրեք դասարանը</option>
+                        <option value="10">10-րդ դասարան</option>
+                        <option value="11">11-րդ դասարան</option>
+                        <option value="12">12-րդ դասարան</option>
+                    </select>
+                    <input type="text" id="reg-student-classroom" placeholder="Մուտքագրեք դասասենյակը (օր.՝ Ա, Բ, Գ, Դ կամ ցանկացած այլ)" required>
+                    <button type="submit">Գրանցվել</button>
+                    <button type="button" onclick="showRoleSelection()" class="back-btn">Վերադառնալ</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Teacher Login/Register -->
+        <div id="teacher-section" class="auth-section hidden">
+            <div class="auth-container">
+                <h2>Ուսուցչի Մուտք</h2>
+                <div class="tab-buttons">
+                    <button onclick="showTeacherLogin()" class="tab-btn active" id="teacher-login-tab">Մուտք</button>
+                    <button onclick="showTeacherRegister()" class="tab-btn" id="teacher-register-tab">Գրանցում</button>
+                </div>
+
+                <!-- Teacher Login Form -->
+                <form id="teacher-login-form" class="auth-form">
+                    <input type="text" id="teacher-username" placeholder="Օգտատիրոջ անուն" required>
+                    <input type="password" id="teacher-password" placeholder="Գաղտնաբառ" required>
+                    <button type="submit">Մուտք գործել</button>
+                    <button type="button" onclick="showRoleSelection()" class="back-btn">Վերադառնալ</button>
+                </form>
+
+                <!-- Teacher Register Form -->
+                <form id="teacher-register-form" class="auth-form hidden">
+                    <input type="text" id="reg-teacher-name" placeholder="Անուն Ազգանուն" required>
+                    <input type="text" id="reg-teacher-username" placeholder="Օգտատիրոջ անուն" required>
+                    <input type="password" id="reg-teacher-password" placeholder="Գաղտնաբառ" required>
+                    <input type="text" id="reg-teacher-subject" placeholder="Առարկա" required>
+                    <button type="submit">Գրանցվել</button>
+                    <button type="button" onclick="showRoleSelection()" class="back-btn">Վերադառնալ</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Student Dashboard -->
+        <div id="student-dashboard" class="dashboard hidden">
+            <div class="dashboard-header">
+                <h2>Բարի գալուստ, <span id="student-name-display"></span></h2>
+                <div class="user-info">
+                    <p>Դասարան: <span id="student-grade-display"></span></p>
+                    <p>Դասասենյակ: <span id="student-classroom-display"></span></p>
+                </div>
+                <button onclick="logout()" class="logout-btn">Դուրս գալ</button>
+            </div>
+            
+            <div class="attendance-section">
+                <h3>Ներկայություն նշել</h3>
+                <div class="attendance-status" id="attendance-status">
+                    <p id="attendance-message">Այսօր դեռ ներկայություն չեք նշել</p>
+                </div>
+                <div class="attendance-buttons" id="attendance-buttons">
+                    <button onclick="markAttendance('present')" class="present-btn">Ներկա</button>
+                    <button onclick="markAttendance('absent')" class="absent-btn">Բացակա</button>
+                </div>
+            </div>
+
+            <div class="attendance-history">
+                <h3>Ներկայության պատմություն</h3>
+                <div id="student-history" class="history-list"></div>
+            </div>
+        </div>
+
+        <!-- Teacher Dashboard -->
+        <div id="teacher-dashboard" class="dashboard hidden">
+            <div class="dashboard-header">
+                <h2>Բարի գալուստ, <span id="teacher-name-display"></span></h2>
+                <div class="user-info">
+                    <p>Առարկա: <span id="teacher-subject-display"></span></p>
+                </div>
+                <button onclick="logout()" class="logout-btn">Դուրս գալ</button>
+            </div>
+
+            <div class="class-selection">
+                <h3>Ընտրեք դասարանը և դասասենյակը</h3>
+                <select id="teacher-grade-select">
+                    <option value="">Ընտրեք դասարանը</option>
+                    <option value="10">10-րդ դասարան</option>
+                    <option value="11">11-րդ դասարան</option>
+                    <option value="12">12-րդ դասարան</option>
+                </select>
+                <select id="teacher-classroom-select">
+                    <option value="">Ընտրեք դասասենյակը</option>
+                </select>
+                <button onclick="loadClassAttendance()" id="load-attendance-btn" disabled>Բեռնել ներկայությունը</button>
+            </div>
+
+            <div id="class-attendance" class="attendance-display hidden">
+                <h3>Դասարանի ներկայություն</h3>
+                <div class="date-selector">
+                    <label>Ընտրեք ամսաթիվը:</label>
+                    <input type="date" id="attendance-date" onchange="loadClassAttendance()">
+                </div>
+                <div id="students-list" class="students-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Alert Modal -->
+    <div id="custom-alert" class="alert-overlay hidden">
+        <div class="alert-modal">
+            <div class="alert-icon">
+                <span id="alert-icon-content">ℹ️</span>
+            </div>
+            <div class="alert-content">
+                <h3 id="alert-title">Ծանուցում</h3>
+                <p id="alert-message"></p>
+            </div>
+            <div class="alert-buttons">
+                <button id="alert-ok-btn" class="alert-btn-primary">Լավ</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
